@@ -14,7 +14,7 @@ class Futuristic<T> extends StatefulWidget {
   /// Widget to display before the [Future] starts executing.
   /// Call [VoidCallback] to start executing the [Future].
   /// If not null, [autoStart] should be false.
-  final Widget? Function(BuildContext, VoidCallback) initialBuilder;
+  final Widget Function(BuildContext, VoidCallback)? initialBuilder;
 
   /// Widget to display while the [Future] is executing.
   /// If null, a [CircularProgressIndicator] will be displayed.
@@ -43,7 +43,7 @@ class Futuristic<T> extends StatefulWidget {
       {Key? key,
       required this.futureBuilder,
       this.autoStart = false,
-      required this.initialBuilder,
+      this.initialBuilder,
       this.busyBuilder,
       this.errorBuilder,
       this.dataBuilder,
@@ -87,7 +87,11 @@ class _FuturisticState<T> extends State<Futuristic<T>> {
   }
 
   Widget _handleInitial(BuildContext context) {
-    return widget.initialBuilder(context, _execute) ?? _defaultWidget();
+    if (widget.initialBuilder != null) {
+      return widget.initialBuilder!(context, _execute);
+    } else {
+      return _defaultWidget();
+    }
   }
 
   Widget _handleSnapshot(BuildContext context, AsyncSnapshot<T> snapshot) {
